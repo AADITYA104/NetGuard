@@ -1,0 +1,16 @@
+,precision,recall,f1-score,support
+Heartbleed,1.0,1.0,1.0,2.0
+Infiltration,1.0,1.0,1.0,5.0
+SSH-Patator,1.0,1.0,1.0,885.0
+DDoS,0.9997,0.9996,0.9997,19204.0
+FTP-Patator,1.0,0.9992,0.9996,1191.0
+BENIGN,0.9999,0.996,0.9979,340965.0
+DoS slowloris,0.9988,0.9965,0.9977,869.0
+DoS Hulk,0.9946,0.9998,0.9972,34661.0
+PortScan,0.9943,0.9997,0.997,23839.0
+DoS GoldenEye,0.9955,0.9968,0.9961,1544.0
+DoS Slowhttptest,0.9928,0.9964,0.9946,825.0
+Web Attack ï¿½ Brute Force,0.8167,0.6504,0.7241,226.0
+Web Attack ï¿½ Sql Injection,1.0,0.3333,0.5,3.0
+Web Attack ï¿½ XSS,0.4051,0.6531,0.5,98.0
+Bot,0.2207,0.9966,0.3614,295.0

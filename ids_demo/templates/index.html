@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time IDS Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Landing Page (Starlight Theme) -->
+    <div id="landing-page">
+        <canvas id="starfield"></canvas>
+        <div class="landing-content">
+            <!-- Hero Section -->
+            <section class="landing-hero">
+                <h1 class="hero-title">CYBER SENTINEL AI</h1>
+                <p class="hero-subtitle">Advanced Real-Time Intrusion Detection System powered by RandomForest Learning.
+                    Analyzing 70+ network features to detect threats instantly.</p>
+                <button id="btn-enter" class="btn-enter">Initiate System</button>
+            </section>
+
+            <!-- System Architecture (Bento Grid) -->
+            <section class="workflow-section">
+                <h2>System Architecture</h2>
+                <div class="bento-grid">
+                    <div class="bento-item span-2">
+                        <div class="bento-icon">🌐</div>
+                        <h3 class="bento-title">Network Traffic</h3>
+                        <p class="bento-desc">Real-time packet capture and flow analysis using Scapy.</p>
+                    </div>
+
+                    <div class="bento-item span-2">
+                        <div class="bento-icon">⚙️</div>
+                        <h3 class="bento-title">Preprocessor</h3>
+                        <p class="bento-desc">Extracts 70 statistical features including Flow IAT and Packet Lengths.
+                        </p>
+                    </div>
+
+                    <div class="bento-item span-2">
+                        <div class="bento-icon">🧠</div>
+                        <h3 class="bento-title">RandomForest AI</h3>
+                        <p class="bento-desc">Multi-class classification model trained on 2 million records.</p>
+                    </div>
+
+                    <div class="bento-item span-2">
+                        <div class="bento-icon">🛡️</div>
+                        <h3 class="bento-title">Threat Detection</h3>
+                        <p class="bento-desc">Instantly identifies PortScan, DDoS, DoS Hulk, and Brute Force attacks.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="landing-features-section">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🚀</div>
+                        <h3 class="feature-title">High Performance</h3>
+                        <p>Process thousands of flows per second with optimized feature extraction pipelines.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3 class="feature-title">Precision AI</h3>
+                        <p>Trained on CIC-IDS-2017 dataset achieving 99.8% accuracy on complex attacks.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔍</div>
+                        <h3 class="feature-title">Deep Inspection</h3>
+                        <p>Analyzes 30 critical features including Flow Duration, IAT, and Packet Size.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Main Dashboard (Hidden by default) -->
+    <div id="dashboard" class="app" style="display: none;">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🛡️ Real-Time Intrusion Detection System</h1>
+                <div class="header-actions">
+                    <div class="live-indicator">
+                        <span class="pulse"></span>
+                        <span>LIVE</span>
+                    </div>
+                    <button id="reset-btn" class="btn-reset">🔄 Reset</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Top Metrics Panel -->
+            <section class="metrics-panel">
+                <div class="metric-card glass">
+                    <div class="metric-icon">📊</div>
+                    <div class="metric-info">
+                        <span class="metric-value" id="total-flows">0</span>
+                        <span class="metric-label">Total Flows</span>
+                    </div>
+                </div>
+                <div class="metric-card glass benign">
+                    <div class="metric-icon">✅</div>
+                    <div class="metric-info">
+                        <span class="metric-value" id="benign-flows">0</span>
+                        <span class="metric-label">Benign</span>
+                    </div>
+                </div>
+                <div class="metric-card glass attack">
+                    <div class="metric-icon">🚨</div>
+                    <div class="metric-info">
+                        <span class="metric-value" id="attack-flows">0</span>
+                        <span class="metric-label">Attacks</span>
+                    </div>
+                </div>
+                <div class="metric-card glass accuracy">
+                    <div class="metric-icon">🎯</div>
+                    <div class="metric-info">
+                        <span class="metric-value" id="accuracy">--</span>
+                        <span class="metric-label">Live Accuracy</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Performance Metrics & Chart -->
+            <section class="performance-section">
+                <!-- Recall Metrics -->
+                <div class="recall-panel glass">
+                    <h2>📈 Per-Class Recall</h2>
+                    <div class="recall-grid" id="recall-grid">
+                        <div class="recall-item">
+                            <span class="recall-label">PortScan</span>
+                            <div class="recall-bar-container">
+                                <div class="recall-bar" id="recall-portscan" style="width: 0%"></div>
+                            </div>
+                            <span class="recall-value" id="recall-portscan-value">--</span>
+                        </div>
+                        <div class="recall-item">
+                            <span class="recall-label">DDoS</span>
+                            <div class="recall-bar-container">
+                                <div class="recall-bar" id="recall-ddos" style="width: 0%"></div>
+                            </div>
+                            <span class="recall-value" id="recall-ddos-value">--</span>
+                        </div>
+                        <div class="recall-item">
+                            <span class="recall-label">DoS Hulk</span>
+                            <div class="recall-bar-container">
+                                <div class="recall-bar" id="recall-hulk" style="width: 0%"></div>
+                            </div>
+                            <span class="recall-value" id="recall-hulk-value">--</span>
+                        </div>
+                        <div class="recall-item">
+                            <span class="recall-label">BENIGN</span>
+                            <div class="recall-bar-container">
+                                <div class="recall-bar benign" id="recall-benign" style="width: 0%"></div>
+                            </div>
+                            <span class="recall-value" id="recall-benign-value">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attack Type Bar Chart -->
+                <div class="chart-panel glass">
+                    <h2>📊 Attack Type Distribution</h2>
+                    <div class="bar-chart" id="attack-chart">
+                        <div class="empty-state">Waiting for data...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Alert Stream & Events -->
+            <section class="events-section glass">
+                <h2>🔔 Real-Time Alert Stream</h2>
+                <div class="events-table-wrapper">
+                    <table class="events-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Source IP</th>
+                                <th>Destination</th>
+                                <th>Classification</th>
+                                <th>Confidence</th>
+                                <th>Severity</th>
+                                <th>Verified</th>
+                            </tr>
+                        </thead>
+                        <tbody id="events-table-body">
+                            <tr class="empty-row">
+                                <td colspan="7">Waiting for network flows...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Manual Test Form -->
+            <section class="manual-test glass">
+                <h2>🔍 Manual Flow Test (30 Model Features)</h2>
+
+                <!-- Attack Preset Selector -->
+                <div class="preset-section">
+                    <label>Quick Attack Simulation:</label>
+                    <div class="preset-buttons" id="preset-buttons">
+                        <button class="preset-btn" data-preset="benign_web">🌐 Normal Traffic</button>
+                        <button class="preset-btn attack" data-preset="portscan">🔍 Port Scan</button>
+                        <button class="preset-btn attack" data-preset="ddos">💥 DDoS</button>
+                        <button class="preset-btn attack" data-preset="dos_hulk">🦠 DoS Hulk</button>
+                        <button class="preset-btn attack" data-preset="ssh_brute">🔑 SSH Brute Force</button>
+                    </div>
+                    <div class="preset-note">
+                        <span class="note-icon">ℹ️</span>
+                        <span id="selected-preset">Select a preset or enter values manually</span>
+                    </div>
+                </div>
+
+                <form id="manual-test-form">
+                    <!-- Dynamic form grid - populated by JavaScript with 30 model features -->
+                    <div class="form-grid-30" id="features-form-grid">
+                        <div class="loading-features">Loading 30 model features...</div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-predict">
+                            <span>🔍 Analyze Flow</span>
+                        </button>
+                        <div id="prediction-result" class="prediction-result"></div>
+                    </div>
+                </form>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>CIC-IDS-2017 Dataset | RandomForest Multi-Class Classifier | Real-Time Demo</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+
+</html>
